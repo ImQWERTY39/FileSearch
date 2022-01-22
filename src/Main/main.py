@@ -1,6 +1,1 @@
-from src.Functions import *
-
-
-WriteLogs = open("src\Main\logs.txt", "w")
-
-WriteLogs.close()
+from src.Functions.Miscellaneous import *
