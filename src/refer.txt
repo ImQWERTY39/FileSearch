@@ -1,0 +1,78 @@
+from os import walk
+from os.path import splitext, join
+from tkinter import Button, Entry, Label, Tk, filedialog
+
+class Main:
+    path = ""
+    PATHS = ""
+    window = Tk()
+    window.title("File Search")
+
+    def search(file_name_entry: Entry, pathlist: Label):
+        INVALID_FILE_NAME = "File name is invalid"
+
+        file = file_name_entry.get()
+
+        if(not Main.validName(file)):
+            Main.PATHS = INVALID_FILE_NAME
+
+        file_name, file_ext = splitext(file)
+
+        Main.PATHS = ""
+        
+        for current_path, folders, files in walk(Main.path):
+            for f in files:
+                f_name, f_ext = splitext(f)
+
+                if((file_name == f_name and file_ext == f_ext) or (file_name == "*" and file_ext == f_ext) or 
+                   (file_name == f_name and file_ext == "*") or (file_name == "*" and f_ext == ".*")):
+                   
+                   Main.PATHS += f"{join(current_path, (f_name + f_ext))}\n"
+
+
+        pathlist.config(text = "")
+        pathlist.config(text = Main.PATHS)
+
+
+    def validName(name: str) -> bool:
+        if(("/" in name) or ("\\" in name) or ("|" in name) or ("\"" in name) or ("?" in name) or ("<" in name) or (">" in name) 
+        or (":" in name)):
+            return False
+        
+        return True
+
+
+
+    def getPath(PathText: Label):
+        Main.path = filedialog.askdirectory()
+        PathText.config(text = f"Path: {Main.path}")
+
+
+
+    def main():
+        FileName = Label(Main.window, text = "File name")
+        PathText = Label(Main.window, text = "Path")
+        paths = Label(Main.window)
+
+        FileNameEntry = Entry(Main.window)
+
+        PathSelect = Button(Main.window, text = "Select", command = lambda: Main.getPath(PathText))
+        StartSearch = Button(Main.window, text = "Search", width = 25, command = lambda: Main.search(FileNameEntry, paths))
+
+
+        FileName.grid(column = 0, row = 0)
+        FileNameEntry.grid(column = 0, row = 1)
+
+        PathText.grid(column = 1, row = 0)
+        PathSelect.grid(column = 1, row = 1)
+
+        StartSearch.grid(column = 0, row = 3, columnspan = 2)
+
+        paths.grid(column = 0, row = 2, columnspan = 2)
+
+
+        Main.window.mainloop()
+
+
+if __name__ == "__main__":
+    Main.main()

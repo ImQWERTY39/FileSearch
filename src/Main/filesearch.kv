@@ -1,8 +1,32 @@
-<MainWidget>
+<MainWidgets>
 
-GridLayout:
+MainWidgets:
     size: root.width, root.height
-    cols: 2
+    cols: 1
+        
+    TextInput:
+        id: file
+        size_hint: 1,.2
+        hint_text: 'File name'
+
+    TextInput:
+        id: path
+        size_hint: 1,.2
+        hint_text: 'Path'
+
+    ScrollView:
+        Label:
+            id: list
+            text: ""
+
+            size_hint_x: None
+            size_hint_y: None
+            width: self.texture_size[0]
+            height: self.texture_size[1]
+
 
     Button:
-        text: 'Search file'
+        id: search_button
+        text: 'Search'
+        size_hint: 1,.1
+        on_release: root.search()
